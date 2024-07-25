@@ -1,0 +1,13 @@
+prefix=C:/Manank_Projects/myproject/myproject/venv/Library
+exec_prefix=C:/Manank_Projects/myproject/myproject/venv/Library
+libdir=C:/Manank_Projects/myproject/myproject/venv/Library/lib
+sharedlibdir=C:/Manank_Projects/myproject/myproject/venv/Library/lib
+includedir=C:/Manank_Projects/myproject/myproject/venv/Library/include
+
+Name: zlib
+Description: zlib compression library
+Version: 1.2.13
+
+Requires:
+Libs: -L${libdir} -L${sharedlibdir} -lz
+Cflags: -I${includedir}

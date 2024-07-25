@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sales Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    
+    .dashboard {
+        max-width: auto;
+        margin: 0 auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .header h1 {
+        margin: 0;
+        background-color: #00FFFF;
+        border : 10px
+        border-radius: 10px;
+    }
+    
+    .filters select {
+        margin-left: 10px;
+        padding: 5px;
+        font-size: 16px;
+    }
+    
+    .stats {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+    
+    .stat-box {
+        grid-template-columns: auto auto auto;
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 5px;
+        text-align: center;
+        width: 23%;
+    }
+    
+    .stat-box h2 {
+        margin: 0 0 10px 0;
+    }
+    
+    .stat-box p {
+        font-size: 24px;
+        margin: 0;
+    }
+    
+    .stat-box span {
+        color: green;
+    }
+    
+    .charts {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+    
+    .chart-box {
+        display: grid;
+        grid-template-columns: left;
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 5px;
+        width: 48%;
+    }
+    
+    .chart {
+        height: 350px;
+        background-color: white;
+    }
+
+    .chart1 {
+      height: 550px;
+      width : 1250px;
+      background-color: white;
+  }
+  </style>
+</head>
+<body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+    <div class="dashboard">
+        <div class="header">
+            <h1>Sales Dashboard</h1>
+            <div class="filters">
+                <label for="date-range">Auto date range</label>
+                <select id="date-range">
+                    <option>This Month</option>
+                    <option>Last Month</option>
+                    <!-- Add other options as needed -->
+                </select>
+                <label for="services">Region</label>
+                <select id="services">
+                    <option>All</option>
+                    <option>Central</option>
+                    <option>West</option>
+                    <option>East</option>
+                    <option>South</option>
+                    <!-- Add other options as needed -->
+                </select>
+                <label for="posts">Category</label>
+                <select id="posts">
+                    <option>All</option>
+                    <option>Furniture</option>
+                    <option>Office Supply</option>
+                    <option>Category</option>
+                    <!-- Add other options as needed -->
+                </select>
+            </div>
+        </div>
+        <div class="stats">
+            <div class="stat-box">
+                <h2>Total Sales</h2>
+                <p class="stat-number">€ {{Total_Sales | safe}}</p>
+            </div>
+            <div class="stat-box">
+                <h2>Total Quanity</h2>
+                <p class="stat-number">{{Total_Quantity | safe}}</p>
+            </div>
+            <div class="stat-box">
+                <h2>Total_Profit</h2>
+                <p class="stat-number">€ {{Total_Profit | safe}}</p>
+            </div>
+        </div>
+        <div class="charts">
+          <div class="chart-box">
+            <div class="chart" id="sales-growth">
+                <canvas id="myChart2" style="width:100%;max-width:650px"></canvas>
+                <script>
+                  var xValues2 = {{ Category | safe }};
+                  var yValues2 = {{ Category_Quantity | safe }};
+                var barColors = ["red", "green","blue","orange","brown"];
+
+                new Chart("myChart2", {
+                  type: "bar",
+                  data: {
+                    labels: xValues2,
+                    datasets: [{
+                      backgroundColor: barColors,
+                      data: yValues2
+                    }]
+                  },
+                  options: {
+                    legend: {display: false},
+                    title: {
+                      display: true,
+                      text: "Category Wise Quantity"
+                    }
+                  }
+                });
+                </script>
+            </div>
+          </div>
+          <div class="chart-box">
+            <div class="chart" id="sales-per-rep">
+                <canvas id="myChart1" style="width:100%;max-width:650px"></canvas>
+                <script>
+                var xValues1 = {{ Region | safe }};
+                var yValues1 = {{ Region_Sales | safe }};
+                var barColors = [
+                  "#b91d47",
+                  "#00aba9",
+                  "#2b5797",
+                  "#e8c3b9",
+                  "#1e7145"
+                ];
+
+                new Chart("myChart1", {
+                  type: "pie",
+                  data: {
+                    labels: xValues1,
+                    datasets: [{
+                      backgroundColor: barColors,
+                      data: yValues1
+                    }]
+                  },
+                  options: {
+                    title: {
+                      display: true,
+                      text: "Region wise Sales"
+                    }
+                  }
+                });
+                </script>
+            </div>
+          </div>  
+        </div>
+        <div class="chart-box1">
+          <div class="chart1" id="State wise Sales">
+            <canvas id="myChart3" style="width:1250px:height:550px"></canvas>
+
+            <script>
+              var xValues3 = {{ State | safe }};
+              var yValues3 = {{ State_Sales | safe }};
+              var barColors = ["red", "green","blue","orange","brown","red", "green","blue","orange","brown","red", "green","blue","orange","brown","red", "green","blue","orange","brown","red", "green","blue","orange","brown","red", "green","blue","orange","brown","red", "green","blue","orange","brown","red", "green","blue","orange","brown","red", "green","blue","orange","brown","red", "green","blue","orange","brown","red", "green","blue","orange","brown","red", "green","blue","orange","brown"];
+              
+              new Chart("myChart3", {
+                type: "bar",
+                data: {
+                  labels: xValues3,
+                  datasets: [{
+                    backgroundColor: barColors,
+                    data: yValues3
+                  }]
+                },
+                options: {
+                  legend: {display: false},
+                  title: {
+                    display: true,
+                    text: "World Wine Production 2018"
+                  }
+                }
+              });
+              </script>
+
+
+          </div>
+        </div>
+    </div>
+</body>
+</html>
